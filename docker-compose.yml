@@ -1,0 +1,15 @@
+# Convenience: spins up MongoDB for local development.
+# Run:  docker compose up -d
+# Then start the backend and frontend as described in the README.
+services:
+  mongo:
+    image: mongo:7
+    container_name: prep-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

@@ -1,0 +1,21 @@
+# Node
+node_modules/
+frontend/dist/
+
+# Go
+backend/backend
+backend/prep-backend
+backend/tmp/
+
+# PM2
+logs/
+.pm2/
+
+# Env
+.env
+backend/.env
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
