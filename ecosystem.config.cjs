@@ -18,8 +18,10 @@ module.exports = {
         // MONGO_URI is intentionally NOT set here: godotenv.Load() won't
         // override env vars already present in the process, so hardcoding it
         // would shadow backend/.env (which holds the real Atlas URI/secret).
-        // Allow the deployed frontend origin through CORS.
-        CORS_ORIGIN: 'http://localhost:9001',
+        // Allow the deployed frontend origin through CORS. The browser's
+        // Origin reaches Go unchanged through nginx + vite's proxy, so the
+        // public domain must be listed or every API call gets a 403.
+        CORS_ORIGIN: 'https://prep.aryan-tech.xyz,http://localhost:9001',
       },
       autorestart: true,
       max_restarts: 10,

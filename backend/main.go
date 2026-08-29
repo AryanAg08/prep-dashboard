@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,17 @@ func env(key, fallback string) string {
 	return fallback
 }
 
+// splitList parses a comma-separated env value into trimmed, non-empty items.
+func splitList(v string) []string {
+	var out []string
+	for _, part := range strings.Split(v, ",") {
+		if p := strings.TrimSpace(part); p != "" {
+			out = append(out, p)
+		}
+	}
+	return out
+}
+
 func main() {
 	// Load .env if present (ignored in prod where real env vars are set).
 	_ = godotenv.Load()
@@ -30,9 +42,12 @@ func main() {
 
 	r := gin.Default()
 
-	// Allow the React dev server (and configurable origins) to call the API.
+	// Allow the configured origins to call the API. Note that the browser's
+	// Origin survives the vite/nginx proxy hop (changeOrigin rewrites Host,
+	// not Origin), so the deployed domain must be listed here or gin-contrib
+	// /cors answers every request with a bare 403.
 	corsCfg := cors.DefaultConfig()
-	corsCfg.AllowOrigins = []string{env("CORS_ORIGIN", "http://localhost:9001")}
+	corsCfg.AllowOrigins = splitList(env("CORS_ORIGIN", "http://localhost:9001"))
 	corsCfg.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 	corsCfg.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 	r.Use(cors.New(corsCfg))

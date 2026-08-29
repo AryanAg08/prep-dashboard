@@ -64,7 +64,7 @@ Environment variables (`backend/.env`):
 | MONGO_URI   | mongodb://localhost:27017   | Atlas SRV string also works  |
 | DB_NAME     | prep_dashboard              |                              |
 | PORT        | 9002                        |                              |
-| CORS_ORIGIN | http://localhost:9001       | frontend origin              |
+| CORS_ORIGIN | http://localhost:9001       | comma-separated origin list  |
 
 ### 3. Frontend
 
