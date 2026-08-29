@@ -65,6 +65,7 @@ Environment variables (`backend/.env`):
 | DB_NAME     | prep_dashboard              |                              |
 | PORT        | 9002                        |                              |
 | CORS_ORIGIN | http://localhost:9001       | comma-separated origin list  |
+| APP_PASSWORD| _(none)_                    | **required**, login password |
 
 ### 3. Frontend
 
@@ -76,6 +77,24 @@ npm run dev
 
 Dev app runs on **http://localhost:5173** and proxies `/api` to the backend
 (`BACKEND_URL`, default `http://localhost:9002`).
+
+## Authentication
+
+The dashboard is password protected. Set `APP_PASSWORD` in `backend/.env`
+(gitignored -- never commit it):
+
+```bash
+openssl rand -hex 32
+```
+
+The backend refuses to start without it. `POST /api/login` checks a submitted
+password against that value and is rate limited to 10 attempts per minute per
+IP; every other `/api` route, reads included, requires the same secret in an
+`X-API-Key` header. Only `/api/health` is open, so uptime probes work.
+
+The browser asks for the password once and keeps it in `localStorage`. There
+are no sessions or tokens -- changing `APP_PASSWORD` and restarting logs
+everyone out.
 
 ## API reference
 

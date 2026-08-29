@@ -27,7 +27,7 @@ type Note struct {
 
 // Resource is a curated study material for a topic.
 type Resource struct {
-	Type  string `json:"type"`  // book, playlist, sheet, course, article
+	Type  string `json:"type"` // book, playlist, sheet, course, article
 	Title string `json:"title"`
 	URL   string `json:"url"`
 	Note  string `json:"note"`
@@ -35,22 +35,12 @@ type Resource struct {
 
 // TopicGuide bundles curated resources + roadmap for one interview topic.
 type TopicGuide struct {
-	Key         string     `json:"key"`
-	Name        string     `json:"name"`
-	Icon        string     `json:"icon"`
-	Summary     string     `json:"summary"`
-	Roadmap     []string   `json:"roadmap"`
-	Resources   []Resource `json:"resources"`
-}
-
-// APIKey is a credential required by every protected /api route.
-// Keys are minted (unauthenticated) via POST /api/keys and checked by
-// the APIKeyAuth middleware against the X-API-Key request header.
-type APIKey struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Key       string             `bson:"key" json:"key"`
-	Label     string             `bson:"label" json:"label"`
-	CreatedAt int64              `bson:"createdAt" json:"createdAt"`
+	Key       string     `json:"key"`
+	Name      string     `json:"name"`
+	Icon      string     `json:"icon"`
+	Summary   string     `json:"summary"`
+	Roadmap   []string   `json:"roadmap"`
+	Resources []Resource `json:"resources"`
 }
 
 // LinkPreview is the metadata scraped from a DSA question URL.

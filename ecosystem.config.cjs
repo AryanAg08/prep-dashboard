@@ -15,6 +15,10 @@ module.exports = {
       env: {
         PORT: '9002',
         DB_NAME: 'prep_dashboard',
+        // APP_PASSWORD is deliberately absent for the same reason as
+        // MONGO_URI below, plus this file is committed -- it belongs in
+        // backend/.env, which is gitignored.
+        //
         // MONGO_URI is intentionally NOT set here: godotenv.Load() won't
         // override env vars already present in the process, so hardcoding it
         // would shadow backend/.env (which holds the real Atlas URI/secret).

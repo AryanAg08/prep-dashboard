@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"prep-dashboard/backend/db"
 	"prep-dashboard/backend/handlers"
+	"prep-dashboard/backend/middleware"
 )
 
 func env(key, fallback string) string {
@@ -38,6 +39,13 @@ func main() {
 	dbName := env("DB_NAME", "prep_dashboard")
 	port := env("PORT", "9002")
 
+	// Fail fast rather than booting an unprotected API: an empty password
+	// would make the constant-time compare match a request that sends none.
+	password := os.Getenv("APP_PASSWORD")
+	if password == "" {
+		log.Fatal("APP_PASSWORD is required (generate one with: openssl rand -hex 32)")
+	}
+
 	db.Connect(mongoURI, dbName)
 
 	r := gin.Default()
@@ -49,14 +57,20 @@ func main() {
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowOrigins = splitList(env("CORS_ORIGIN", "http://localhost:9001"))
 	corsCfg.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
-	corsCfg.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	corsCfg.AllowHeaders = []string{"Origin", "Content-Type", "Authorization", middleware.HeaderName}
 	r.Use(cors.New(corsCfg))
 
+	// Health check stays open so uptime probes don't need the key.
 	r.GET("/api/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 
-	api := r.Group("/api")
+	// Login is necessarily open -- it is how a client obtains the secret to
+	// use everywhere else. It is rate limited per IP.
+	r.POST("/api/login", handlers.Login(password))
+
+	// Everything else requires the shared secret, reads included.
+	api := r.Group("/api", middleware.APIKeyAuth(password))
 	{
 		api.GET("/guides", handlers.GetGuides)
 

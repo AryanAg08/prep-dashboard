@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import KeyGate from './components/KeyGate'
 import Overview from './views/Overview'
 import ActivityLog from './views/ActivityLog'
 import Notes from './views/Notes'
@@ -20,37 +21,39 @@ export default function App() {
   const bump = () => setRefreshKey((k) => k + 1)
 
   return (
-    <div className="app">
-      <aside className="sidebar">
-        <div className="brand">
-          <span className="brand-icon">🎯</span>
-          <div>
-            <div className="brand-title">Prep Dashboard</div>
-            <div className="brand-sub">Placement Tracker</div>
+    <KeyGate>
+      <div className="app">
+        <aside className="sidebar">
+          <div className="brand">
+            <span className="brand-icon">🎯</span>
+            <div>
+              <div className="brand-title">Prep Dashboard</div>
+              <div className="brand-sub">Placement Tracker</div>
+            </div>
           </div>
-        </div>
-        <nav>
-          {NAV.map((n) => (
-            <button
-              key={n.key}
-              className={`nav-item ${view === n.key ? 'active' : ''}`}
-              onClick={() => setView(n.key)}
-            >
-              <span className="nav-icon">{n.icon}</span>
-              {n.label}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-foot">Stay consistent. Ship daily. 🚀</div>
-      </aside>
+          <nav>
+            {NAV.map((n) => (
+              <button
+                key={n.key}
+                className={`nav-item ${view === n.key ? 'active' : ''}`}
+                onClick={() => setView(n.key)}
+              >
+                <span className="nav-icon">{n.icon}</span>
+                {n.label}
+              </button>
+            ))}
+          </nav>
+          <div className="sidebar-foot">Stay consistent. Ship daily. 🚀</div>
+        </aside>
 
-      <main className="content">
-        {view === 'overview' && <Overview refreshKey={refreshKey} />}
-        {view === 'activity' && <ActivityLog onChange={bump} />}
-        {view === 'notes' && <Notes />}
-        {view === 'materials' && <StudyMaterials />}
-        {view === 'dsa' && <DsaLinks />}
-      </main>
-    </div>
+        <main className="content">
+          {view === 'overview' && <Overview refreshKey={refreshKey} />}
+          {view === 'activity' && <ActivityLog onChange={bump} />}
+          {view === 'notes' && <Notes />}
+          {view === 'materials' && <StudyMaterials />}
+          {view === 'dsa' && <DsaLinks />}
+        </main>
+      </div>
+    </KeyGate>
   )
 }
