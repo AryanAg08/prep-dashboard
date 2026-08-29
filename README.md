@@ -55,7 +55,7 @@ cp .env.example .env      # adjust MONGO_URI if needed
 go run .
 ```
 
-API runs on **http://localhost:8080**.
+API runs on **http://localhost:9002**.
 
 Environment variables (`backend/.env`):
 
@@ -63,8 +63,8 @@ Environment variables (`backend/.env`):
 | ----------- | --------------------------- | ---------------------------- |
 | MONGO_URI   | mongodb://localhost:27017   | Atlas SRV string also works  |
 | DB_NAME     | prep_dashboard              |                              |
-| PORT        | 8080                        |                              |
-| CORS_ORIGIN | http://localhost:5173       | frontend origin              |
+| PORT        | 9002                        |                              |
+| CORS_ORIGIN | http://localhost:9001       | frontend origin              |
 
 ### 3. Frontend
 
@@ -74,7 +74,8 @@ npm install
 npm run dev
 ```
 
-App runs on **http://localhost:5173** and proxies `/api` to the backend.
+Dev app runs on **http://localhost:5173** and proxies `/api` to the backend
+(`BACKEND_URL`, default `http://localhost:9002`).
 
 ## API reference
 
@@ -95,7 +96,7 @@ App runs on **http://localhost:5173** and proxies `/api` to the backend.
 
 ## Deploy (PM2)
 
-Runs the backend on **:9000** and the frontend on **:9001**.
+Runs the backend on **:9002** and the frontend on **:9001**.
 
 ```bash
 npm install -g pm2      # once
@@ -105,7 +106,7 @@ npm install -g pm2      # once
 `deploy.sh` builds the Go binary (`backend/prep-backend`) and the Vite
 production build (`frontend/dist`), then `pm2 startOrReload ecosystem.config.cjs`
 (zero-downtime reload if already running). The frontend is served by
-`vite preview`, which proxies `/api` → `http://localhost:9000`.
+`vite preview`, which proxies `/api` → `http://localhost:9002`.
 
 Useful PM2 commands:
 

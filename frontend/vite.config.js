@@ -9,7 +9,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: process.env.BACKEND_URL || 'http://localhost:9002',
         changeOrigin: true,
       },
     },
@@ -19,9 +19,12 @@ export default defineConfig({
   preview: {
     port: Number(process.env.FRONTEND_PORT) || 9001,
     host: true,
+    // Vite blocks requests whose Host header it doesn't recognise; nginx
+    // forwards the real hostname, so allow the deployed domain through.
+    allowedHosts: (process.env.ALLOWED_HOSTS || 'localhost').split(','),
     proxy: {
       '/api': {
-        target: process.env.BACKEND_URL || 'http://localhost:9000',
+        target: process.env.BACKEND_URL || 'http://localhost:9002',
         changeOrigin: true,
       },
     },

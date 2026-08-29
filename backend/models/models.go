@@ -43,6 +43,16 @@ type TopicGuide struct {
 	Resources   []Resource `json:"resources"`
 }
 
+// APIKey is a credential required by every protected /api route.
+// Keys are minted (unauthenticated) via POST /api/keys and checked by
+// the APIKeyAuth middleware against the X-API-Key request header.
+type APIKey struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Key       string             `bson:"key" json:"key"`
+	Label     string             `bson:"label" json:"label"`
+	CreatedAt int64              `bson:"createdAt" json:"createdAt"`
+}
+
 // LinkPreview is the metadata scraped from a DSA question URL.
 type LinkPreview struct {
 	URL         string `json:"url"`

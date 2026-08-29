@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Deploy Prep Dashboard with PM2.
-#   backend  -> Go binary on :9000
+#   backend  -> Go binary on :9002
 #   frontend -> vite preview of built dist on :9001
 #
 # Usage:  ./deploy.sh
@@ -53,7 +53,7 @@ echo ""
 pm2 status
 echo ""
 echo "==> Done."
-echo "    Backend : http://localhost:9000/api/health"
+echo "    Backend : http://localhost:9002/api/health"
 echo "    Frontend: http://localhost:9001"
 echo ""
 echo "    Tip: run 'pm2 startup' once to auto-start on boot."

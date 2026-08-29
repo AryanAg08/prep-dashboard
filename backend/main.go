@@ -24,7 +24,7 @@ func main() {
 
 	mongoURI := env("MONGO_URI", "mongodb://localhost:27017")
 	dbName := env("DB_NAME", "prep_dashboard")
-	port := env("PORT", "8080")
+	port := env("PORT", "9002")
 
 	db.Connect(mongoURI, dbName)
 
@@ -32,7 +32,7 @@ func main() {
 
 	// Allow the React dev server (and configurable origins) to call the API.
 	corsCfg := cors.DefaultConfig()
-	corsCfg.AllowOrigins = []string{env("CORS_ORIGIN", "http://localhost:5173")}
+	corsCfg.AllowOrigins = []string{env("CORS_ORIGIN", "http://localhost:9001")}
 	corsCfg.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 	corsCfg.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 	r.Use(cors.New(corsCfg))
